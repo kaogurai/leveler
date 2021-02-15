@@ -73,7 +73,7 @@ class Leveler(commands.Cog):
         default_guild = {
             "disabled": False,
             "lvl_msg": False,
-            "mentions": True,
+            "mentions": False,
             "text_only": False,
             "private_lvl_message": False,
             "lvl_msg_lock": None,
