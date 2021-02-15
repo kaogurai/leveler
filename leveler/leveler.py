@@ -265,7 +265,7 @@ class Leveler(commands.Cog):
 
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(attach_files=True)
-    @commands.command()
+    @commands.command( aliases=["lvl"])
     @commands.guild_only()
     async def rank(self, ctx, user: discord.Member = None):
         """Displays a user's rank card."""
@@ -1591,14 +1591,14 @@ class Leveler(commands.Cog):
 
     @commands.group()
     @commands.guild_only()
-    async def badge(self, ctx):
+    async def lvlbadge(self, ctx):
         """Badge configuration options."""
         pass
 
-    @badge.command(name="available")
+    @lvlbadge.command(name="available")
     @commands.bot_has_permissions(embed_links=True)
     @commands.guild_only()
-    async def badge_available(self, ctx):
+    async def lvlbadge_available(self, ctx):
         """Get a list of available badges."""
         ids = [
             ("global", "Global", self.bot.user.avatar_url),
@@ -1646,7 +1646,7 @@ class Leveler(commands.Cog):
         for embed in global_list + server_list:
             await ctx.send(embed=embed)
 
-    @badge.command(name="list")
+    @lvlbadge.command(name="list")
     @commands.bot_has_permissions(embed_links=True)
     @commands.guild_only()
     async def listuserbadges(self, ctx, user: discord.Member = None):
@@ -1694,7 +1694,7 @@ class Leveler(commands.Cog):
         else:
             await menu(ctx, embeds, DEFAULT_CONTROLS)
 
-    @badge.command(name="buy")
+    @lvlbadge.command(name="buy")
     @commands.guild_only()
     async def badge_buy(self, ctx, name: str, global_badge: str = None):
         """
@@ -1766,7 +1766,7 @@ class Leveler(commands.Cog):
         else:
             await ctx.send("**The badge `{}` does not exist in the global badge list. List badges with** `{}badge available`.".format(ctx.prefix))
 
-    @badge.command(name="set")
+    @lvlbadge.command(name="set")
     @commands.guild_only()
     async def badge_set(self, ctx, name: str, priority_num: int):
         """
@@ -1810,7 +1810,7 @@ class Leveler(commands.Cog):
         return await self.db.users.find_one({"user_id": userinfo["user_id"]})
 
     @checks.mod_or_permissions(manage_roles=True)
-    @badge.command(name="add")
+    @lvlbadge.command(name="add")
     @commands.guild_only()
     async def badge_add(self, ctx, name: str, badge_image_url: str, border_color: str, price: int, *, description: str):
         """
@@ -1915,7 +1915,7 @@ class Leveler(commands.Cog):
             await ctx.send("**The `{}` badge has been updated.**".format(name))
 
     @checks.is_owner()
-    @badge.command(name="type")
+    @lvlbadge.command(name="type")
     @commands.guild_only()
     async def badge_type(self, ctx, name: str):
         """Circles or bars."""
@@ -1928,7 +1928,7 @@ class Leveler(commands.Cog):
         await ctx.send("**Badge type set to `{}`.**".format(name.lower()))
 
     @checks.mod_or_permissions(manage_roles=True)
-    @badge.command(name="delete", aliases=["remove"])
+    @lvlbadge.command(name="delete", aliases=["remove"])
     @commands.guild_only()
     async def badge_delete(self, ctx, *, name: str):
         """
@@ -1977,7 +1977,7 @@ class Leveler(commands.Cog):
             await ctx.send("**That badge does not exist.**")
 
     @checks.mod_or_permissions(manage_roles=True)
-    @badge.command(name="give")
+    @lvlbadge.command(name="give")
     @commands.guild_only()
     async def badge_give(self, ctx, user: discord.Member, name: str, global_badge: str = None):
         """
@@ -2027,7 +2027,7 @@ class Leveler(commands.Cog):
                 await ctx.send("**That badge doesn't exist in this server!**")
 
     @checks.mod_or_permissions(manage_roles=True)
-    @badge.command(name="take")
+    @lvlbadge.command(name="take")
     @commands.guild_only()
     async def badge_take(self, ctx, user: discord.Member, name: str):
         """Take a user's badge."""
@@ -2060,7 +2060,7 @@ class Leveler(commands.Cog):
             )
 
     @checks.mod_or_permissions(manage_roles=True)
-    @badge.command(name="link")
+    @lvlbadge.command(name="link")
     @commands.guild_only()
     async def badge_link(self, ctx, badge_name: str, level: int):
         """Associate a badge with a level."""
@@ -2087,7 +2087,7 @@ class Leveler(commands.Cog):
             await ctx.send("**The `{}` badge has been linked to level `{}`.**".format(badge_name, level))
 
     @checks.admin_or_permissions(manage_roles=True)
-    @badge.command(name="unlink")
+    @lvlbadge.command(name="unlink")
     @commands.guild_only()
     async def badge_unlink(self, ctx, *, badge_name: str):
         """Unlink a badge/level association."""
@@ -2104,7 +2104,7 @@ class Leveler(commands.Cog):
             await ctx.send("**The `{}` badge is not linked to any levels!**".format(badge_name))
 
     @checks.mod_or_permissions(manage_roles=True)
-    @badge.command(name="listlinks")
+    @lvlbadge.command(name="listlinks")
     @commands.bot_has_permissions(embed_links=True)
     @commands.guild_only()
     async def badge_list(self, ctx):
@@ -2131,11 +2131,11 @@ class Leveler(commands.Cog):
     @commands.group()
     @commands.guild_only()
     @checks.mod_or_permissions(manage_roles=True)
-    async def role(self, ctx):
+    async def lvlrole(self, ctx):
         """Role configuration."""
         pass
 
-    @role.command(name="link")
+    @lvlrole.command(name="link")
     @commands.guild_only()
     async def linkrole(self, ctx, role_name: str, level: int, remove_role=None):
         """Associate a role with a level. Removes previous role if given."""
@@ -2174,7 +2174,7 @@ class Leveler(commands.Cog):
                     "Will also remove `{}` role.**".format(role_name, level, remove_role)
                 )
 
-    @role.command(name="unlink")
+    @lvlrole.command(name="unlink")
     @commands.guild_only()
     async def unlinkrole(self, ctx, *, role_name: str):
         """Unlink a role/level association."""
@@ -2190,7 +2190,7 @@ class Leveler(commands.Cog):
         else:
             await ctx.send("**The `{}` role is not linked to any levels!**".format(role_name))
 
-    @role.command(name="listlinks")
+    @lvlrole.command(name="listlinks")
     @commands.bot_has_permissions(embed_links=True)
     @commands.guild_only()
     async def listrole(self, ctx):
@@ -3749,17 +3749,17 @@ class Leveler(commands.Cog):
         return re.search(reg_ex, str(color))
 
     @checks.is_owner()
-    @lvladmin.group()
+    @commands.group()
     @commands.guild_only()
-    async def convert(self, ctx):
+    async def lvlconvert(self, ctx):
         """Conversion commands."""
         pass
 
     @checks.is_owner()
-    @convert.command(name="mee6levels")
+    @lvlconvert.command(name="mee6levels")
     @commands.guild_only()
     async def mee6convertlevels(self, ctx, pages: int):
-        """Convert Mee6 levels.
+        """Convert MEE6 levels.
         Each page returns 999 users at most.
         This command must be run in a channel in the guild to be converted."""
         if await self.config.guild(ctx.guild).mentions():
@@ -3787,7 +3787,7 @@ class Leveler(commands.Cog):
                 if r.status == 200:
                     data = await r.json()
                 else:
-                    return await ctx.send("No data was found within the Mee6 API.")
+                    return await ctx.send("No data was found within the MEE6 API.")
 
             for userdata in data["players"]:
                 await asyncio.sleep(0)
@@ -3834,7 +3834,7 @@ class Leveler(commands.Cog):
         await ctx.send(f"{failed} users could not be found and were skipped.")
 
     @checks.is_owner()
-    @convert.command(name="mee6ranks")
+    @lvlconvert.command(name="mee6ranks")
     @commands.guild_only()
     async def mee6convertranks(self, ctx):
         """Convert Mee6 role rewards.
@@ -3843,7 +3843,7 @@ class Leveler(commands.Cog):
             if r.status == 200:
                 data = await r.json()
             else:
-                return await ctx.send("No data was found within the Mee6 API.")
+                return await ctx.send("No data was found within the MEE6 API.")
         server = ctx.guild
         remove_role = None
         for role in data["role_rewards"]:
@@ -3875,7 +3875,7 @@ class Leveler(commands.Cog):
                 await ctx.send("**The `{}` role has been linked to level `{}`**".format(role_name, level))
 
     @checks.is_owner()
-    @convert.command(name="tatsulevels")
+    @lvlconvert.command(name="tatsulevels")
     @commands.guild_only()
     async def tatsumakiconvertlevels(self, ctx):
         """Convert Tatsumaki levels.
