@@ -3748,35 +3748,43 @@ class Leveler(commands.Cog):
         reg_ex = r"^#(?:[0-9a-fA-F]{3}){1,2}$"
         return re.search(reg_ex, str(color))
 
-    @checks.is_owner()
+    @commands.guildowner()
     @commands.group()
     @commands.guild_only()
     async def lvlconvert(self, ctx):
         """Conversion commands."""
         pass
 
-    @checks.is_owner()
-    @lvlconvert.command(name="mee6levels")
+    @lvlconvert.command(name="mee6lvls")
     @commands.guild_only()
-    async def mee6convertlevels(self, ctx, pages: int):
+    async def mee6levels(self, ctx):
         """Convert MEE6 levels.
-        Each page returns 999 users at most.
+        This cannot be reverted.
         This command must be run in a channel in the guild to be converted."""
+        if ctx.guild.member_count <= 100:
+            pages = 1
+        else: 
+            pages = (ctx.guild.member_count // 100) + 1
         if await self.config.guild(ctx.guild).mentions():
             msg = (
-                "**{}, levelup mentions are on in this server.**\n"
-                "The bot will ping every user that will be leveled up through this process if you continue.\n"
-                "Reply with `yes` if you want this conversion to continue.\n"
-                "If not, reply with `no` and then run `{}lvladmin mention` to turn off mentions before running this command again."
-            ).format(ctx.author.display_name, ctx.prefix)
-            await ctx.send(msg)
-            pred = MessagePredicate.yes_or_no(ctx)
-            try:
-                await self.bot.wait_for("message", check=pred, timeout=15)
-            except TimeoutError:
-                return await ctx.send("**Timed out waiting for a response.**")
-            if pred.result is False:
-                return await ctx.send("**Command cancelled.**")
+                "**Warning:** Level-up mentions are enabled on this server. It will ping every user that will be leveled up through this process.\n"
+                "I recommend replying with `no` and running `{}lvladmin mention` to turn off mentions, then run this command again.\n\n"
+                "**Warning:** You cannot undo this, proceed with caution.\n"
+                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this."
+            ).format(ctx.prefix)
+        else:
+            msg = (
+                "**Warning:** You cannot undo this, proceed with caution.\n"
+                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this."
+            )
+        await ctx.send(msg)
+        pred = MessagePredicate.yes_or_no(ctx)
+        try:
+            await self.bot.wait_for("message", check=pred, timeout=15)
+        except TimeoutError:
+            return await ctx.send("**Timed out waiting for a response.**")
+        if pred.result is False:
+            return await ctx.send("**Command cancelled.**")
         failed = 0
         for i in range(pages):
             await asyncio.sleep(0)
@@ -3833,11 +3841,10 @@ class Leveler(commands.Cog):
                 await self._handle_levelup(user, userinfo, server, channel)
         await ctx.send(f"{failed} users could not be found and were skipped.")
 
-    @checks.is_owner()
     @lvlconvert.command(name="mee6ranks")
     @commands.guild_only()
-    async def mee6convertranks(self, ctx):
-        """Convert Mee6 role rewards.
+    async def mee6roles(self, ctx):
+        """Convert MEE6 role rewards.
         This command must be run in a channel in the guild to be converted."""
         async with self.session.get(f"https://mee6.xyz/api/plugins/levels/leaderboard/{ctx.guild.id}") as r:
             if r.status == 200:
@@ -3874,10 +3881,9 @@ class Leveler(commands.Cog):
 
                 await ctx.send("**The `{}` role has been linked to level `{}`**".format(role_name, level))
 
-    @checks.is_owner()
-    @lvlconvert.command(name="tatsulevels")
+    @lvlconvert.command(name="tatsulvls")
     @commands.guild_only()
-    async def tatsumakiconvertlevels(self, ctx):
+    async def tatsulevels(self, ctx):
         """Convert Tatsumaki levels.
         This command must be run in a channel in the guild to be converted."""
         token = await self.bot.get_shared_api_tokens("tatsumaki")
