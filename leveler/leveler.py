@@ -3761,10 +3761,10 @@ class Leveler(commands.Cog):
         """Convert MEE6 levels.
         This cannot be reverted.
         This command must be run in a channel in the guild to be converted."""
-        if ctx.guild.member_count <= 100:
+        if ctx.guild.member_count <= 999:
             pages = 1
         else: 
-            pages = (ctx.guild.member_count // 100) + 1
+            pages = (ctx.guild.member_count // 999) + 1
         if await self.config.guild(ctx.guild).mentions():
             msg = (
                 "**Warning:** Level-up mentions are enabled on this server. It will ping every user that will be leveled up through this process.\n"
