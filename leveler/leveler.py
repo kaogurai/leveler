@@ -3881,8 +3881,8 @@ class Leveler(commands.Cog):
 
                 await ctx.send("**The `{}` role has been linked to level `{}`**".format(role_name, level))
 
-    @lvlconvert.command(name="tatsulevels")
-    @commands.guild_only()
+#   @lvlconvert.command(name="tatsulevels")
+#    @commands.guild_only()
     async def tatsuconvertlevels(self, ctx):
         """Convert Tatsu levels.
         This command must be run in a channel in the guild to be converted."""
