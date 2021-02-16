@@ -3755,7 +3755,7 @@ class Leveler(commands.Cog):
         """Conversion commands."""
         pass
 
-    @lvlconvert.command(name="mee6lvls")
+    @lvlconvert.command(name="mee6levels", aliases= ["mee6lvls"])
     @commands.guild_only()
     async def mee6levels(self, ctx):
         """Convert MEE6 levels.
@@ -3841,9 +3841,9 @@ class Leveler(commands.Cog):
                 await self._handle_levelup(user, userinfo, server, channel)
         await ctx.send(f"{failed} users could not be found and were skipped.")
 
-    @lvlconvert.command(name="mee6ranks")
+    @lvlconvert.command(name="mee6ranks", aliases= ["mee6roles"])
     @commands.guild_only()
-    async def mee6roles(self, ctx):
+    async def mee6ranks(self, ctx):
         """Convert MEE6 role rewards.
         This command must be run in a channel in the guild to be converted."""
         async with self.session.get(f"https://mee6.xyz/api/plugins/levels/leaderboard/{ctx.guild.id}") as r:
@@ -3881,10 +3881,10 @@ class Leveler(commands.Cog):
 
                 await ctx.send("**The `{}` role has been linked to level `{}`**".format(role_name, level))
 
-    @lvlconvert.command(name="tatsulvls")
+    @lvlconvert.command(name="tatsulevels", aliases= ["tatsulvls"])
     @commands.guild_only()
     async def tatsulevels(self, ctx):
-        """Convert Tatsumaki levels.
+        """Convert Tatsu levels.
         This command must be run in a channel in the guild to be converted."""
         token = await self.bot.get_shared_api_tokens("tatsumaki")
         tatsu_token = token.get("api_key", False)
