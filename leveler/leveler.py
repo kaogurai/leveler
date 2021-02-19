@@ -3748,7 +3748,6 @@ class Leveler(commands.Cog):
         reg_ex = r"^#(?:[0-9a-fA-F]{3}){1,2}$"
         return re.search(reg_ex, str(color))
 
-    @commands.guildowner()
     @commands.group()
     @commands.guild_only()
     async def lvlconvert(self, ctx):
@@ -3756,17 +3755,18 @@ class Leveler(commands.Cog):
         pass
 
     @lvlconvert.group()
+    @commands.guildowner()
     async def mee6(self, ctx):
         """MEE6 conversion commands."""
         pass
 
     @lvlconvert.group()
+    @commands.guildowner()
     async def tatsu(self, ctx):
         """Tatsu conversion commands."""
         pass
 
     @mee6.command(name="levels")
-    @commands.guild_only()
     @commands.cooldown(1, 3600, commands.BucketType.guild)
     async def mee6levels(self, ctx):
         """Convert MEE6 levels.
