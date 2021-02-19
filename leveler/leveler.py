@@ -3755,9 +3755,20 @@ class Leveler(commands.Cog):
         """Conversion commands."""
         pass
 
-    @lvlconvert.command(name="mee6levels")
+    @lvlconvert.group()
+    async def mee6(self, ctx):
+        """MEE6 conversion commands."""
+        pass
+
+    @lvlconvert.group()
+    async def tatsu(self, ctx):
+        """Tatsu conversion commands."""
+        pass
+
+    @mee6.command(name="levels")
     @commands.guild_only()
-    async def mee6convertlevels(self, ctx):
+    @commands.cooldown(1, 3600, commands.BucketType.guild)
+    async def mee6levels(self, ctx):
         """Convert MEE6 levels.
         This cannot be reverted.
         This command must be run in a channel in the guild to be converted."""
@@ -3843,9 +3854,9 @@ class Leveler(commands.Cog):
                 await self._handle_levelup(user, userinfo, server, channel)
         await ctx.send(f"{failed} users could not be found and were skipped.")
 
-    @lvlconvert.command(name="mee6roles")
-    @commands.guild_only()
-    async def mee6convertroles(self, ctx):
+    @mee6.command(name="roles")
+    @commands.cooldown(1, 3600, commands.BucketType.guild)
+    async def mee6roles(self, ctx):
         """Convert MEE6 role rewards.
         This command must be run in a channel in the guild to be converted."""
         async with self.session.get(f"https://mee6.xyz/api/plugins/levels/leaderboard/{ctx.guild.id}") as r:
@@ -3883,9 +3894,9 @@ class Leveler(commands.Cog):
 
                 await ctx.send("**The `{}` role has been linked to level `{}`**".format(role_name, level))
 
-    @lvlconvert.command(name="tatsulevels")
-    @commands.guild_only()
-    async def tatsuconvertlevels(self, ctx):
+    @tatsu.command(name="levels")
+    @commands.cooldown(1, 3600, commands.BucketType.guild)
+    async def tatsulevels(self, ctx):
         """Convert Tatsu levels.
         This command must be run in a channel in the guild to be converted."""
         token = await self.bot.get_shared_api_tokens("tatsu")
@@ -3976,3 +3987,19 @@ class Leveler(commands.Cog):
                 )
                 await self._handle_levelup(user, userinfo, server, channel)
         await ctx.send(f"{failed} users could not be found and were skipped.")
+
+    @lvlconvert.command(name="explain")
+    @commands.mod()
+    @commands.guild_only()
+    async def explain(self, ctx):
+        """Explains how to convert levels."""
+        msg = (
+                "**Warning:** These commands are extremely dangerous, and cannot be undone.\n\n"
+                "Although moderators can view this command, only the server owner can run the commands to actually convert the levels.\n\n"
+                "Currently, you can convert levels from MEE6 and Tatsu, in addition to being able to convert role rewards from MEE6 automatically.\n\n"
+                "MEE6's levels will be converted by the level of the user, while Tatsu's levels will have the XP go through my leveling function to create it.\n\n"
+                "These commands may take a long time to complete depending on the amount of members in your server.\n\n"
+                "If the server owner would like to continue, there are two sub-commands, `{}lvlconvert mee6` and `{}lvlconvert tatsu`."
+            ).format(ctx.prefix, ctx.prefix)
+        embed = discord.Embed(description=msg, colour=await ctx.embed_colour())
+        await ctx.send(embed=embed)
