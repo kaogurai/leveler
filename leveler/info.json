@@ -17,6 +17,7 @@
     "pillow",
     "numpy",
     "scipy",
-    "tabulate"
+    "tabulate",
+    "tatsu.py"
   ]
 }
