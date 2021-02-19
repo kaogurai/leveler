@@ -3,7 +3,6 @@ import contextlib
 import logging
 import operator
 import os
-import json
 import platform
 import random
 import re
@@ -16,7 +15,6 @@ from datetime import datetime, timedelta
 from tabulate import tabulate
 from io import BytesIO
 from typing import Union
-from tatsumaki.wrapper import ApiWrapper
 
 import aiohttp
 import discord
@@ -3799,7 +3797,7 @@ class Leveler(commands.Cog):
                 if r.status == 200:
                     data = await r.json()
                 else:
-                    return await ctx.send("No data was found within the MEE6's API.")
+                    return await ctx.send("No data was found within MEE6's API.")
 
             for userdata in data["players"]:
                 await asyncio.sleep(0)
