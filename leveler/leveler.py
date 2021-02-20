@@ -3781,13 +3781,13 @@ class Leveler(commands.Cog):
                 "**Warning:** Level-up mentions are enabled on this server. It will ping every user that will be leveled up through this process.\n"
                 "I recommend replying with `no` and running `{}lvladmin mention` to turn off mentions, then run this command again.\n\n"
                 "**Warning:** You cannot undo this, proceed with caution.\n"
-                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this."
+                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this.\n"
                 "Keep in mind this command will take a long amount of time if your server is large, so don't worry."
             ).format(ctx.prefix)
         else:
             msg = (
                 "**Warning:** You cannot undo this, proceed with caution.\n"
-                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this."
+                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this.\n"
                 "Keep in mind this command will take a long amount of time if your server is large, so don't worry."
             )
         await ctx.send(msg)
@@ -3902,7 +3902,7 @@ class Leveler(commands.Cog):
         token = await self.bot.get_shared_api_tokens("tatsu")
         tatsu_token = token.get("api_key", False)
         if not tatsu_token:
-            return await ctx.send(f"This bot does not have a valid Tatsu API key set up. "
+            return await ctx.send(f"This bot does not have a valid Tatsu API key set up.\n"
                                   f"If you are the bot owner, you can set it via `{ctx.clean_prefix}set api tatsu api_key <api_key_here>`")
 
         if await self.config.guild(ctx.guild).mentions():
@@ -3910,13 +3910,13 @@ class Leveler(commands.Cog):
                 "**Warning:** Level-up mentions are enabled on this server. It will ping every user that will be leveled up through this process.\n"
                 "I recommend replying with `no` and running `{}lvladmin mention` to turn off mentions, then run this command again.\n\n"
                 "**Warning:** You cannot undo this, proceed with caution.\n"
-                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this."
+                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this.\n"
                 "Keep in mind this command will take a long amount of time if your server is large, so don't worry."
             ).format(ctx.prefix)
         else:
             msg = (
                 "**Warning:** You cannot undo this, proceed with caution.\n"
-                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this."
+                "Reply with `yes` if you want this conversion to continue, or reply with `no` if you want to abort this.\n"
                 "Keep in mind this command will take a long amount of time if your server is large, so don't worry."
             )
         await ctx.send(msg)
